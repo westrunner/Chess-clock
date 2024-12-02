@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:chess_clock/Layout/set_custom_timer.dart';
+import 'package:chess_clock/Layout/show_game_over_dialog.dart';
+import 'package:flutter/material.dart';
 
 class ChessClock extends StatefulWidget {
   @override
@@ -16,7 +18,6 @@ class _ChessClockState extends State<ChessClock> {
   bool isPaused = false;
   int addTimePerMove = 0; // Time to add after each move (in seconds)
 
-
   void startTimer() {
     timer?.cancel(); // Cancel any existing timer
     timer = Timer.periodic(Duration(milliseconds: 100), (timer) {
@@ -27,14 +28,28 @@ class _ChessClockState extends State<ChessClock> {
               player1Time -= 100; // Decrease by 100 milliseconds
             } else {
               this.timer?.cancel();
-              showGameOverDialog('Black player time is up!');
+              showGameOverDialog(
+                message: 'Black player time is up!',
+                context: context,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  restart();
+                },
+              );
             }
           } else {
             if (player2Time > 0) {
               player2Time -= 100; // Decrease by 100 milliseconds
             } else {
               this.timer?.cancel();
-              showGameOverDialog('White player time is up!');
+              showGameOverDialog(
+                message: 'White player time is up!',
+                context: context,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  restart();
+                },
+              );
             }
           }
         });
@@ -46,25 +61,24 @@ class _ChessClockState extends State<ChessClock> {
     setState(() {
       isPlayer1Turn = !isPlayer1Turn;
       // Add bonus time only if the game has started
-        if (isPlayer1Turn) {
-          player2Time +=
-              addTimePerMove * 1000; // Add time to player 1 (in milliseconds)
-        } else {
-          player1Time +=
-              addTimePerMove * 1000; // Add time to player 2 (in milliseconds)
-        }
-      
+      if (isPlayer1Turn) {
+        player2Time +=
+            addTimePerMove * 1000; // Add time to player 1 (in milliseconds)
+      } else {
+        player1Time +=
+            addTimePerMove * 1000; // Add time to player 2 (in milliseconds)
+      }
     });
     startTimer();
   }
 
-  void pauseTimer() {
+  void pause() {
     setState(() {
       isPaused = !isPaused;
     });
   }
 
-  void resetTimers() {
+  void restart() {
     setState(() {
       player1Time = initialTime * 1000; // Reset to initial time in milliseconds
       player2Time = initialTime * 1000; // Reset to initial time in milliseconds
@@ -73,91 +87,6 @@ class _ChessClockState extends State<ChessClock> {
       isPlayer1Turn = false;
     });
     timer?.cancel(); // Stop the active timer
-  }
-
-  void setCustomTimer() {
-    int minutes = 0;
-    int seconds = 0;
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Set Timer'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  decoration: InputDecoration(labelText: 'Minutes'),
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) {
-                    minutes = int.tryParse(value) ?? 0;
-                  },
-                ),
-                TextField(
-                  decoration: InputDecoration(labelText: 'Seconds'),
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) {
-                    seconds = int.tryParse(value) ?? 0;
-                  },
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                      labelText: 'Bonus Time per Move (Seconds)'),
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) {
-                    addTimePerMove = int.tryParse(value) ?? 0;
-                  },
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                setState(() {
-                  player1Time = (minutes * 60 + seconds) *
-                      1000; // Convert to milliseconds
-                  player2Time = (minutes * 60 + seconds) *
-                      1000; // Convert to milliseconds
-                  isPaused = false;
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void showGameOverDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Game Over'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                resetTimers();
-              },
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -199,7 +128,7 @@ class _ChessClockState extends State<ChessClock> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   ElevatedButton(
-                    onPressed: pauseTimer,
+                    onPressed: pause,
                     style: ElevatedButton.styleFrom(
                       padding:
                           EdgeInsets.symmetric(horizontal: 30, vertical: 15),
@@ -208,7 +137,22 @@ class _ChessClockState extends State<ChessClock> {
                     child: Text(isPaused ? 'Resume' : 'Pause'),
                   ),
                   ElevatedButton(
-                    onPressed: setCustomTimer,
+                    onPressed: () => setCustomTimer(
+                      context: context,
+                      onChanged: (value) {
+                        addTimePerMove = int.tryParse(value) ?? 0;
+                      },
+                      onPressed: (minutes, seconds) {
+                        setState(() {
+                          player1Time = (minutes * 60 + seconds) *
+                              1000; // Convert to milliseconds
+                          player2Time = (minutes * 60 + seconds) *
+                              1000; // Convert to milliseconds
+                          isPaused = false;
+                        });
+                        Navigator.of(context).pop();
+                      },
+                    ),
                     style: ElevatedButton.styleFrom(
                       padding:
                           EdgeInsets.symmetric(horizontal: 30, vertical: 15),
@@ -217,7 +161,7 @@ class _ChessClockState extends State<ChessClock> {
                     child: Text('Set Timer'),
                   ),
                   ElevatedButton(
-                    onPressed: resetTimers,
+                    onPressed: restart,
                     style: ElevatedButton.styleFrom(
                       padding:
                           EdgeInsets.symmetric(horizontal: 30, vertical: 15),
