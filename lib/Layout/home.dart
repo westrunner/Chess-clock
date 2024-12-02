@@ -1,7 +1,8 @@
 import 'dart:async';
 
-import 'package:chess_clock/Layout/set_custom_timer.dart';
-import 'package:chess_clock/Layout/show_game_over_dialog.dart';
+import 'package:chess_clock/Layout/dialog/set_custom_timer.dart';
+import 'package:chess_clock/Layout/dialog/show_game_over_dialog.dart';
+import 'package:chess_clock/Layout/widget/app_button.dart';
 import 'package:flutter/material.dart';
 
 class ChessClock extends StatefulWidget {
@@ -127,17 +128,27 @@ class _ChessClockState extends State<ChessClock> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ElevatedButton(
-                    onPressed: pause,
-                    style: ElevatedButton.styleFrom(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                      textStyle: TextStyle(fontSize: 18),
-                    ),
-                    child: Text(isPaused ? 'Resume' : 'Pause'),
+                  // ElevatedButton(
+                  //   onPressed: pause,
+                  //   style: ElevatedButton.styleFrom(
+                  //     padding:
+                  //         EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  //     textStyle: TextStyle(fontSize: 18),
+                  //   ),
+                  //   child: Text(isPaused ? 'Resume' : 'Pause'),
+                  // ),
+                  AppButton(
+                    pepeOnTap: pause,
+                    textoBoton: isPaused ? 'Resume' : 'Pause',
+                    fondoColor: Colors.pink.shade200,
                   ),
-                  ElevatedButton(
-                    onPressed: () => setCustomTimer(
+                  AppButton(
+                    pepeOnTap: restart,
+                    textoBoton: 'restart',
+                    fondoColor: Colors.lightBlueAccent,
+                  ),
+                  AppButton(
+                    pepeOnTap: () => setCustomTimer(
                       context: context,
                       onChanged: (value) {
                         addTimePerMove = int.tryParse(value) ?? 0;
@@ -153,22 +164,42 @@ class _ChessClockState extends State<ChessClock> {
                         Navigator.of(context).pop();
                       },
                     ),
-                    style: ElevatedButton.styleFrom(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                      textStyle: TextStyle(fontSize: 18),
-                    ),
-                    child: Text('Set Timer'),
+                    textoBoton: 'Set Timer',
+                    fondoColor: Colors.lightGreen,
                   ),
-                  ElevatedButton(
-                    onPressed: restart,
-                    style: ElevatedButton.styleFrom(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                      textStyle: TextStyle(fontSize: 18),
-                    ),
-                    child: Text('Restart'),
-                  ),
+                  // ElevatedButton(
+                  //   onPressed: () => setCustomTimer(
+                  //     context: context,
+                  //     onChanged: (value) {
+                  //       addTimePerMove = int.tryParse(value) ?? 0;
+                  //     },
+                  //     onPressed: (minutes, seconds) {
+                  //       setState(() {
+                  //         player1Time = (minutes * 60 + seconds) *
+                  //             1000; // Convert to milliseconds
+                  //         player2Time = (minutes * 60 + seconds) *
+                  //             1000; // Convert to milliseconds
+                  //         isPaused = false;
+                  //       });
+                  //       Navigator.of(context).pop();
+                  //     },
+                  //   ),
+                  //   style: ElevatedButton.styleFrom(
+                  //     padding:
+                  //         EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  //     textStyle: TextStyle(fontSize: 18),
+                  //   ),
+                  //   child: Text('Set Timer'),
+                  // ),
+                  // ElevatedButton(
+                  //   onPressed: restart,
+                  //   style: ElevatedButton.styleFrom(
+                  //     padding:
+                  //         EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  //     textStyle: TextStyle(fontSize: 18),
+                  //   ),
+                  //   child: Text('Restart'),
+                  // ),
                 ],
               ),
             ),
