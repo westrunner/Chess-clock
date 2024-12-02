@@ -1,14 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-class ChessClockApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: ChessClock(),
-    );
-  }
-}
 
 class ChessClock extends StatefulWidget {
   @override
@@ -23,7 +15,7 @@ class _ChessClockState extends State<ChessClock> {
   bool isPlayer1Turn = false;
   bool isPaused = false;
   int addTimePerMove = 0; // Time to add after each move (in seconds)
-  bool hasStarted = true; // To track if the game has started
+
 
   void startTimer() {
     timer?.cancel(); // Cancel any existing timer
@@ -54,7 +46,6 @@ class _ChessClockState extends State<ChessClock> {
     setState(() {
       isPlayer1Turn = !isPlayer1Turn;
       // Add bonus time only if the game has started
-      if (hasStarted) {
         if (isPlayer1Turn) {
           player2Time +=
               addTimePerMove * 1000; // Add time to player 1 (in milliseconds)
@@ -62,10 +53,7 @@ class _ChessClockState extends State<ChessClock> {
           player1Time +=
               addTimePerMove * 1000; // Add time to player 2 (in milliseconds)
         }
-      } else {
-        // Set hasStarted to true after the first move
-        hasStarted = true;
-      }
+      
     });
     startTimer();
   }
@@ -83,7 +71,6 @@ class _ChessClockState extends State<ChessClock> {
       addTimePerMove = 0;
       isPaused = false;
       isPlayer1Turn = false;
-      hasStarted = false; // Reset the game start flag
     });
     timer?.cancel(); // Stop the active timer
   }

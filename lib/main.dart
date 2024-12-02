@@ -1,5 +1,5 @@
+import 'package:chess_clock/Layout/app.dart';
 import 'package:flutter/material.dart';
-import 'Layout/home.dart';
 
 void main() {
   runApp(ChessClockApp());
