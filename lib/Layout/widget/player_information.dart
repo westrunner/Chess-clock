@@ -18,8 +18,10 @@ class PlayerInformation extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        if (isActive)
-          Container(
+        AnimatedOpacity(
+          opacity: isActive ? 1 : 0,
+          duration: const Duration(milliseconds: 300),
+          child: Container(
             width: 200, // Ancho del círculo
             decoration: BoxDecoration(
               shape: BoxShape.circle,
@@ -35,6 +37,7 @@ class PlayerInformation extends StatelessWidget {
               ),
             ),
           ),
+        ),
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
