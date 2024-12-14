@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:chess_clock/Layout/dialog/set_custom_timer.dart';
 import 'package:chess_clock/Layout/dialog/show_game_over_dialog.dart';
 import 'package:chess_clock/Layout/widget/app_button.dart';
+import 'package:chess_clock/Layout/widget/player_information.dart';
 import 'package:flutter/material.dart';
 
 class ChessClock extends StatefulWidget {
@@ -114,9 +115,10 @@ class _ChessClockState extends State<ChessClock> {
                 child: Container(
                   color: Colors.white,
                   child: Center(
-                    child: buildTimer(player2Time, 'White',
-                        !isPlayer1Turn), // Invert logic here
-                  ),
+                      child: PlayerInformation(
+                          time: player2Time,
+                          isFirstPlayer: true,
+                          isActive: !isPlayer1Turn)),
                 ),
               ),
             ),
@@ -128,15 +130,6 @@ class _ChessClockState extends State<ChessClock> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  // ElevatedButton(
-                  //   onPressed: pause,
-                  //   style: ElevatedButton.styleFrom(
-                  //     padding:
-                  //         EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  //     textStyle: TextStyle(fontSize: 18),
-                  //   ),
-                  //   child: Text(isPaused ? 'Resume' : 'Pause'),
-                  // ),
                   AppButton(
                     pepeOnTap: pause,
                     textoBoton: isPaused ? 'Resume' : 'Pause',
@@ -167,39 +160,6 @@ class _ChessClockState extends State<ChessClock> {
                     textoBoton: 'Set Timer',
                     fondoColor: Colors.lightGreen,
                   ),
-                  // ElevatedButton(
-                  //   onPressed: () => setCustomTimer(
-                  //     context: context,
-                  //     onChanged: (value) {
-                  //       addTimePerMove = int.tryParse(value) ?? 0;
-                  //     },
-                  //     onPressed: (minutes, seconds) {
-                  //       setState(() {
-                  //         player1Time = (minutes * 60 + seconds) *
-                  //             1000; // Convert to milliseconds
-                  //         player2Time = (minutes * 60 + seconds) *
-                  //             1000; // Convert to milliseconds
-                  //         isPaused = false;
-                  //       });
-                  //       Navigator.of(context).pop();
-                  //     },
-                  //   ),
-                  //   style: ElevatedButton.styleFrom(
-                  //     padding:
-                  //         EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  //     textStyle: TextStyle(fontSize: 18),
-                  //   ),
-                  //   child: Text('Set Timer'),
-                  // ),
-                  // ElevatedButton(
-                  //   onPressed: restart,
-                  //   style: ElevatedButton.styleFrom(
-                  //     padding:
-                  //         EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                  //     textStyle: TextStyle(fontSize: 18),
-                  //   ),
-                  //   child: Text('Restart'),
-                  // ),
                 ],
               ),
             ),
@@ -215,56 +175,15 @@ class _ChessClockState extends State<ChessClock> {
               child: Container(
                 color: Colors.black,
                 child: Center(
-                  child: buildTimer(player1Time, 'Black',
-                      isPlayer1Turn), // Invert logic here as well
-                ),
+                    child: PlayerInformation(
+                        time: player1Time,
+                        isFirstPlayer: false,
+                        isActive: isPlayer1Turn)),
               ),
             ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget buildTimer(int time, String player, bool isActive) {
-    int minutes = (time ~/ 60000); // Convert milliseconds to minutes
-    int seconds =
-        ((time % 60000) ~/ 1000); // Convert remaining milliseconds to seconds
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          player,
-          style: TextStyle(
-            fontSize: 24,
-            color: player == 'White' ? Colors.black : Colors.white,
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Text(
-                '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
-                style: TextStyle(
-                  fontSize: 48,
-                  color: player == 'White' ? Colors.black : Colors.white,
-                ),
-              ),
-              // Green line below the opposite timer
-              if (isActive)
-                Container(
-                  margin: EdgeInsets.only(top: 8),
-                  height: 3,
-                  width: MediaQuery.of(context).size.width *
-                      0.4, // Adjust to 40% of the screen width (you can change this value)
-                  color: Colors.green, // Green line
-                ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }
