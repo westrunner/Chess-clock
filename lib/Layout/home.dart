@@ -104,24 +104,18 @@ class _ChessClockState extends State<ChessClock> {
         children: [
           Expanded(
             flex: 3,
-            child: GestureDetector(
-              onTap: () {
-                if (!isPaused && !isPlayer1Turn) {
-                  switchTurn();
-                }
-              },
-              child: Transform.rotate(
+            child: Transform.rotate(
                 angle: 3.14159, // Rotate 180 degrees
-                child: Container(
-                  color: Colors.white,
-                  child: Center(
-                      child: PlayerInformation(
-                          time: player2Time,
-                          isFirstPlayer: true,
-                          isActive: !isPlayer1Turn)),
-                ),
-              ),
-            ),
+                child: PlayerInformation(
+                  time: player2Time,
+                  isFirstPlayer: true,
+                  isActive: !isPlayer1Turn,
+                  miOnTap: () {
+                    if (!isPaused && !isPlayer1Turn) {
+                      switchTurn();
+                    }
+                  },
+                )),
           ),
           Expanded(
             flex: 1,
@@ -165,23 +159,17 @@ class _ChessClockState extends State<ChessClock> {
             ),
           ),
           Expanded(
-            flex: 3,
-            child: GestureDetector(
-              onTap: () {
-                if (!isPaused && isPlayer1Turn) {
-                  switchTurn();
-                }
-              },
-              child: Container(
-                color: Colors.black,
-                child: Center(
-                    child: PlayerInformation(
-                        time: player1Time,
-                        isFirstPlayer: false,
-                        isActive: isPlayer1Turn)),
-              ),
-            ),
-          ),
+              flex: 3,
+              child: PlayerInformation(
+                time: player1Time,
+                isFirstPlayer: false,
+                isActive: isPlayer1Turn,
+                miOnTap: () {
+                  if (!isPaused && isPlayer1Turn) {
+                    switchTurn();
+                  }
+                },
+              )),
         ],
       ),
     );
