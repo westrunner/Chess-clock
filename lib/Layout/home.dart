@@ -119,62 +119,66 @@ class _ChessClockState extends State<ChessClock> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-            flex: 3,
-            child: Transform.rotate(
-                angle: 3.14159, // Rotate 180 degrees
-                child: PlayerInformation(
-                  time: player2Time,
-                  isFirstPlayer: true,
-                  isActive: !isPlayer1Turn,
-                  miOnTap: () {
-                    if (!isPaused && !isPlayer1Turn) {
-                      switchTurn();
-                    }
-                  },
-                )),
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(
-              color: Colors.grey[200],
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              flex: 3,
+              child: Transform.rotate(
+                  angle: 3.14159, // Rotate 180 degrees
+                  child: PlayerInformation(
+                    time: player2Time,
+                    isFirstPlayer: true,
+                    isActive: !isPlayer1Turn,
+                    miOnTap: () {
+                      if (!isPaused && !isPlayer1Turn) {
+                        switchTurn();
+                      }
+                    },
+                  )),
+            ),
+            Expanded(
+              flex: 1,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  AppButton(
-                    pepeOnTap: pause,
-                    textoBoton: isPaused ? 'Resume' : 'Pause',
-                    fondoColor: Colors.pink.shade200,
+                  Expanded(
+                    child: AppButton(
+                      pepeOnTap: pause,
+                      textoBoton: isPaused ? 'Resume' : 'Pause',
+                      fondoColor: Colors.pink.shade200,
+                    ),
                   ),
-                  AppButton(
-                    pepeOnTap: restart,
-                    textoBoton: 'restart',
-                    fondoColor: Colors.lightBlueAccent,
+                  Expanded(
+                    child: AppButton(
+                      pepeOnTap: restart,
+                      textoBoton: 'Restart',
+                      fondoColor: Colors.lightBlueAccent,
+                    ),
                   ),
-                  AppButton(
-                    pepeOnTap: setTimer,
-                    textoBoton: 'Set Timer',
-                    fondoColor: Colors.lightGreen,
+                  Expanded(
+                    child: AppButton(
+                      pepeOnTap: setTimer,
+                      textoBoton: 'Set Timer',
+                      fondoColor: Colors.orangeAccent,
+                    ),
                   ),
                 ],
               ),
             ),
-          ),
-          Expanded(
-              flex: 3,
-              child: PlayerInformation(
-                time: player1Time,
-                isFirstPlayer: false,
-                isActive: isPlayer1Turn,
-                miOnTap: () {
-                  if (!isPaused && isPlayer1Turn) {
-                    switchTurn();
-                  }
-                },
-              )),
-        ],
+            Expanded(
+                flex: 3,
+                child: PlayerInformation(
+                  time: player1Time,
+                  isFirstPlayer: false,
+                  isActive: isPlayer1Turn,
+                  miOnTap: () {
+                    if (!isPaused && isPlayer1Turn) {
+                      switchTurn();
+                    }
+                  },
+                )),
+          ],
+        ),
       ),
     );
   }

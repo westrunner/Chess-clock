@@ -14,15 +14,18 @@ class AppButton extends StatelessWidget {
     return GestureDetector(
       onTap: pepeOnTap,
       child: Container(
-        padding: EdgeInsets.all(16),
-        margin: EdgeInsets.all(8),
+        height: 500,
+        alignment: Alignment.center,
+        padding: const EdgeInsets.all(16),
         color: fondoColor,
         child: Text(
           textoBoton,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
-            fontSize: 16,
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
           ),
+          textAlign: TextAlign.center,
         ),
       ),
     );
