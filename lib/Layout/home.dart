@@ -91,6 +91,25 @@ class _ChessClockState extends State<ChessClock> {
     timer?.cancel(); // Stop the active timer
   }
 
+  void setTimer() {
+    setCustomTimer(
+      context: context,
+      onChanged: (value) {
+        addTimePerMove = int.tryParse(value) ?? 0;
+      },
+      onPressed: (minutes, seconds) {
+        setState(() {
+          player1Time =
+              (minutes * 60 + seconds) * 1000; // Convert to milliseconds
+          player2Time =
+              (minutes * 60 + seconds) * 1000; // Convert to milliseconds
+          isPaused = false;
+        });
+        Navigator.of(context).pop();
+      },
+    );
+  }
+
   @override
   void dispose() {
     timer?.cancel();
@@ -135,22 +154,7 @@ class _ChessClockState extends State<ChessClock> {
                     fondoColor: Colors.lightBlueAccent,
                   ),
                   AppButton(
-                    pepeOnTap: () => setCustomTimer(
-                      context: context,
-                      onChanged: (value) {
-                        addTimePerMove = int.tryParse(value) ?? 0;
-                      },
-                      onPressed: (minutes, seconds) {
-                        setState(() {
-                          player1Time = (minutes * 60 + seconds) *
-                              1000; // Convert to milliseconds
-                          player2Time = (minutes * 60 + seconds) *
-                              1000; // Convert to milliseconds
-                          isPaused = false;
-                        });
-                        Navigator.of(context).pop();
-                      },
-                    ),
+                    pepeOnTap: setTimer,
                     textoBoton: 'Set Timer',
                     fondoColor: Colors.lightGreen,
                   ),
